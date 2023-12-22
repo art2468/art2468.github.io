@@ -4,7 +4,7 @@ title:  "Les Ambassadeurs, the first Restaurant we Visited in Paris"
 author: sal
 categories: [ Lifestyle ]
 tags: [ France ]
-image: assets/images/300.jpg
+image: assets/images/900.jpg
 rating: 4.5
 ---
 
