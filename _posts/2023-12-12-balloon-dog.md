@@ -4,7 +4,7 @@ title:  "Whimsical Radiance: A Crystal-Crafted Homage to Balloon Dog Joy"
 author: john
 categories: [ Object D'Art, Crystal ]
 tags: [ Balloon, Crystal ]
-image: assets/image/200.jpg
+image: assets/images/200.jpg
 ---
 
 Presenting a captivating reinterpretation of Jeff Koons' iconic balloon dog, this exquisite objet d'art stands at twelve inches high and spans a tantalizing four inches in width. Redefining the boundaries of beauty, it offers art connoisseurs an intimate and dazzling experience encapsulating the essence of joy, playfulness, and aesthetic brilliance.
