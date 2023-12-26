@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Sylvan Elegance: A Handcrafted Silver Crystal Genie Bottle"
-author: sal
+author: 
 categories: [ Crystals]
 image: assets/images/401.jpg
 ---
