@@ -11,18 +11,9 @@ The bulbous base of the genie bottle is adorned with a meticulous arrangement of
 
 As your eyes ascend, the neck of the bottle boasts a magnificent display of craftsmanship, featuring a cascade of tear drop crystals that gently sway like whispers of magic. The cap, a crowning glory, is a vision of luxury itself, covered in fine crystals that sparkle like stars in the night sky.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WI_dR46TFUE" frameborder="0" allowfullscreen></iframe>
+
 This "Ethereal Elegance" Genie Bottle is more than a mere decorative item; it's a statement of refined taste and a testament to the artistry of crystal design. A true collector's dream, this masterpiece promises to be the centerpiece of any collection, evoking a sense of wonder and admiration.
 
 Don't miss the opportunity to own this rare gem, where crystal and gold converge in a harmonious symphony of elegance. Indulge in the allure of luxury and add a touch of enchantment to your collection with this extraordinary Crystal and Gold Genie Bottle.
-
----
-layout: default
-title: My YouTube Video
----
-
-# My YouTube Video
-
-Here is an external YouTube video:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/WI_dR46TFUE" frameborder="0" allowfullscreen></iframe>
 
