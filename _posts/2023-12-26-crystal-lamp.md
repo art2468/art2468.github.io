@@ -5,6 +5,7 @@ title:  "Enchanted Glow: Crystal Elegance Table Lamp"
 categories: [ crystal]
 
 image: assets/images/800.jpg
+---
 
 Illuminate her world with the mesmerizing charm of our "Enchanted Glow" Crystal Elegance Table Lamp. This exquisite lamp is a radiant fusion of sophistication and whimsy, perfect to adorn any bedside table or desk.
 
