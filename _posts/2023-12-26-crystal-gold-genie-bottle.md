@@ -14,3 +14,9 @@ As your eyes ascend, the neck of the bottle boasts a magnificent display of craf
 This "Ethereal Elegance" Genie Bottle is more than a mere decorative item; it's a statement of refined taste and a testament to the artistry of crystal design. A true collector's dream, this masterpiece promises to be the centerpiece of any collection, evoking a sense of wonder and admiration.
 
 Don't miss the opportunity to own this rare gem, where crystal and gold converge in a harmonious symphony of elegance. Indulge in the allure of luxury and add a touch of enchantment to your collection with this extraordinary Crystal and Gold Genie Bottle.
+
+
+<video width="640" height="360" controls>
+  <source src="assets/images/gold-genie-bottle.mp4">
+  Your browser does not support the video tag.
+</video>
