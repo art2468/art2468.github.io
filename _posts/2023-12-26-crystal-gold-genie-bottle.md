@@ -15,8 +15,14 @@ This "Ethereal Elegance" Genie Bottle is more than a mere decorative item; it's 
 
 Don't miss the opportunity to own this rare gem, where crystal and gold converge in a harmonious symphony of elegance. Indulge in the allure of luxury and add a touch of enchantment to your collection with this extraordinary Crystal and Gold Genie Bottle.
 
+---
+layout: default
+title: My YouTube Video
+---
 
-<video width="640" height="360" controls>
-  <source src="assets/images/gold-genie-bottle.mp4">
-  Your browser does not support the video tag.
-</video>
+# My YouTube Video
+
+Here is an external YouTube video:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WI_dR46TFUE" frameborder="0" allowfullscreen></iframe>
+
