@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Crystal Elegance: A Sparkling Bell Canister for Your Glamorous Space"
-author: sal
+
 categories: [ crystals ]
 
 image: assets/images/700.jpg
