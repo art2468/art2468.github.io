@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyOrigin } from '@/lib/csrf';
 import { requireUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { parseTags } from '@/lib/utils';
 import { PROSPECT_STATUSES } from '@/lib/constants';
 
@@ -12,35 +12,23 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   const action = String(formData.get('_action') || '');
   const id = params.id;
 
-  const existing = await prisma.prospect.findFirst({ where: { id, userId: user.id }, select: { id: true } });
+  const existing = db.getProspectByIdForUser(id, user.id);
   if (!existing) return NextResponse.redirect(new URL('/prospects', req.url));
 
   if (action === 'update_meta') {
     const status = String(formData.get('status') || 'NEW');
-    const tags = parseTags(String(formData.get('tagsInput') || ''));
-    await prisma.prospect.update({
-      where: { id },
-      data: {
-        status: (PROSPECT_STATUSES.includes(status as (typeof PROSPECT_STATUSES)[number]) ? status : 'NEW') as (typeof PROSPECT_STATUSES)[number],
-        tags,
-      },
+    db.updateProspect(id, {
+      status: PROSPECT_STATUSES.includes(status as never) ? status : 'NEW',
+      tags: JSON.stringify(parseTags(String(formData.get('tagsInput') || ''))),
     });
   }
 
-  if (action === 'mark_messaged') {
-    await prisma.prospect.update({ where: { id }, data: { status: 'MESSAGED', lastContactedAt: new Date() } });
-  }
-
-  if (action === 'mark_replied') {
-    await prisma.prospect.update({ where: { id }, data: { status: 'REPLIED' } });
-  }
+  if (action === 'mark_messaged') db.updateProspect(id, { status: 'MESSAGED', lastContactedAt: new Date().toISOString() });
+  if (action === 'mark_replied') db.updateProspect(id, { status: 'REPLIED' });
 
   if (action === 'schedule_follow_up') {
-    const rawDate = String(formData.get('nextFollowUpAt') || '');
-    const nextFollowUpAt = new Date(rawDate);
-    if (!Number.isNaN(nextFollowUpAt.getTime())) {
-      await prisma.prospect.update({ where: { id }, data: { nextFollowUpAt } });
-    }
+    const nextFollowUpAt = new Date(String(formData.get('nextFollowUpAt') || ''));
+    if (!Number.isNaN(nextFollowUpAt.getTime())) db.updateProspect(id, { nextFollowUpAt: nextFollowUpAt.toISOString() });
   }
 
   return NextResponse.redirect(new URL(`/prospects/${id}?tab=interactions`, req.url));

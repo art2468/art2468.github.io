@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyOrigin } from '@/lib/csrf';
 import { requireUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { interactionSchema } from '@/lib/validation';
 
 export async function POST(req: Request, { params }: { params: { id: string } }) {
@@ -14,11 +14,10 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     content: form.get('content'),
     outcome: form.get('outcome'),
   });
-  if (!parsed.success) return NextResponse.redirect(new URL(`/prospects/${params.id}?tab=interactions`, req.url));
 
-  const prospect = await prisma.prospect.findFirst({ where: { id: params.id, userId: user.id } });
-  if (!prospect) return NextResponse.redirect(new URL('/prospects', req.url));
+  const prospect = db.getProspectByIdForUser(params.id, user.id);
+  if (!parsed.success || !prospect) return NextResponse.redirect(new URL(`/prospects/${params.id}?tab=interactions`, req.url));
 
-  await prisma.interaction.create({ data: { prospectId: prospect.id, ...parsed.data, outcome: parsed.data.outcome || null } });
+  db.createInteraction({ prospectId: prospect.id, ...parsed.data, outcome: parsed.data.outcome || null });
   return NextResponse.redirect(new URL(`/prospects/${params.id}?tab=interactions`, req.url));
 }

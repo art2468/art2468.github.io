@@ -4,3 +4,13 @@ _site
 .sass-cache
 *~
 .jekyll-cache
+
+# Next.js
+.next
+node_modules
+
+# local env/data
+.env
+outreachops.db
+outreachops.db-shm
+outreachops.db-wal

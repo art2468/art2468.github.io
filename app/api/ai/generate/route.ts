@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { verifyOrigin } from '@/lib/csrf';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireUser } from '@/lib/auth';
 import { runAnalysis } from '@/lib/ai';
 import { checkRateLimit } from '@/lib/rate-limit';
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
   const form = await req.formData();
   const prospectId = String(form.get('prospectId') || '');
-  const prospect = await prisma.prospect.findFirst({ where: { id: prospectId, userId: user.id } });
+  const prospect = db.getProspectByIdForUser(prospectId, user.id);
   if (!prospect) return NextResponse.json({ error: 'Prospect not found' }, { status: 404 });
 
   try {
@@ -27,20 +27,18 @@ export async function POST(req: Request) {
       myNotes: prospect.myNotes,
     });
 
-    await prisma.prospect.update({
-      where: { id: prospect.id },
-      data: {
-        aiCareerSummary: data.career_summary,
-        aiLikelyPriorities: data.likely_priorities,
-        aiFitScore: data.fit_score,
-        aiFitReason: data.fit_reason,
-        aiBestAngle: data.best_angle,
-        aiPersonalNote: data.personal_note,
-        aiFollowUpQuestion: data.follow_up_question,
-        aiModel: model,
-        aiRunAt: new Date(),
-      },
+    db.updateProspect(prospect.id, {
+      aiCareerSummary: JSON.stringify(data.career_summary),
+      aiLikelyPriorities: JSON.stringify(data.likely_priorities),
+      aiFitScore: data.fit_score,
+      aiFitReason: data.fit_reason,
+      aiBestAngle: data.best_angle,
+      aiPersonalNote: data.personal_note,
+      aiFollowUpQuestion: data.follow_up_question,
+      aiModel: model,
+      aiRunAt: new Date().toISOString(),
     });
+
     return NextResponse.redirect(new URL(`/prospects/${prospect.id}?tab=ai`, req.url));
   } catch (error) {
     console.error('AI generation error', error instanceof Error ? error.message : 'unknown');

@@ -1,47 +1,24 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/auth';
+import { db } from '@/lib/db';
 import { ProspectFilters } from '@/components/prospect-filters';
 import { StatusChip } from '@/components/status-chip';
-import { formatDate } from '@/lib/utils';
+import { formatDate, parseJsonArray } from '@/lib/utils';
 
 export default async function ProspectsPage({ searchParams }: { searchParams: Record<string, string | undefined> }) {
   const user = await requireUser();
-  const q = searchParams.q?.trim();
-  const status = searchParams.status;
-  const fitMin = Number(searchParams.fitMin ?? '');
-  const fitMax = Number(searchParams.fitMax ?? '');
-  const tag = searchParams.tag?.trim().toLowerCase();
-  const sort = searchParams.sort || 'updated';
-
-  const prospects = await prisma.prospect.findMany({
-    where: {
-      userId: user.id,
-      ...(q
-        ? {
-            OR: [
-              { firstName: { contains: q } },
-              { lastName: { contains: q } },
-              { company: { contains: q } },
-              { title: { contains: q } },
-              { profileUrl: { contains: q } },
-            ],
-          }
-        : {}),
-      ...(status ? { status: status as never } : {}),
-      ...(Number.isFinite(fitMin) ? { aiFitScore: { gte: fitMin } } : {}),
-      ...(Number.isFinite(fitMax) ? { aiFitScore: { lte: fitMax } } : {}),
-    },
-    orderBy:
-      sort === 'fit'
-        ? { aiFitScore: 'desc' }
-        : sort === 'followup'
-          ? { nextFollowUpAt: 'asc' }
-          : { updatedAt: 'desc' },
+  const prospects = db.listProspectsForUser({
+    userId: user.id,
+    q: searchParams.q?.trim(),
+    status: searchParams.status,
+    fitMin: Number(searchParams.fitMin ?? ''),
+    fitMax: Number(searchParams.fitMax ?? ''),
+    sort: searchParams.sort || 'updated',
   });
 
+  const tag = searchParams.tag?.trim().toLowerCase();
   const filtered = tag
-    ? prospects.filter((p: (typeof prospects)[number]) => ((p.tags as string[] | null) || []).some((t: string) => t.toLowerCase().includes(tag)))
+    ? prospects.filter((p) => parseJsonArray(p.tags).some((t: string) => t.toLowerCase().includes(tag)))
     : prospects;
 
   return (
@@ -60,10 +37,10 @@ export default async function ProspectsPage({ searchParams }: { searchParams: Re
             </tr>
           </thead>
           <tbody>
-            {filtered.map((p: (typeof filtered)[number]) => (
+            {filtered.map((p) => (
               <tr key={p.id} className="border-t hover:bg-slate-50">
                 <td className="p-2"><Link className="text-blue-700 underline" href={`/prospects/${p.id}`}>{[p.firstName, p.lastName].filter(Boolean).join(' ') || 'Unnamed'}</Link></td>
-                <td className="p-2">{p.company || '—'}</td><td className="p-2">{p.title || '—'}</td><td className="p-2"><StatusChip status={p.status} /></td><td className="p-2">{p.aiFitScore ?? '—'}</td><td className="p-2">{formatDate(p.nextFollowUpAt)}</td><td className="p-2">{formatDate(p.updatedAt)}</td><td className="p-2">{((p.tags as string[] | null) || []).join(', ') || '—'}</td>
+                <td className="p-2">{p.company || '—'}</td><td className="p-2">{p.title || '—'}</td><td className="p-2"><StatusChip status={p.status} /></td><td className="p-2">{p.aiFitScore ?? '—'}</td><td className="p-2">{formatDate(p.nextFollowUpAt)}</td><td className="p-2">{formatDate(p.updatedAt)}</td><td className="p-2">{parseJsonArray(p.tags).join(', ') || '—'}</td>
               </tr>
             ))}
           </tbody>
